@@ -23,14 +23,14 @@ app.get ('/api', function(req, res) {
     console.log("GET");
 
     let sqlInsert = 'INSERT INTO test (text) VALUES ($1)';
-    let sqlInsertAttr = [req.text];
+    let sqlInsertAttr = [req.query.text];
     pool.connect((err, client) => {
         if (err) throw err;
         client.query(sqlInsert, sqlInsertAttr,
         (err, data) => {
             if(err) throw err;
             client.release();
-            console.log("Inserted: ");
+            console.log("Inserted: ", req.query.text);
         });
     });
 
