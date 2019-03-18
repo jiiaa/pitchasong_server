@@ -34,7 +34,7 @@ app.get ('/api', function(req, res) {
         });
     });
 
-    var response = {text: req.text};
+    var response = {text: req.query.text};
     res.json(response);
 });
 
