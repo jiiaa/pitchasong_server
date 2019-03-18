@@ -21,7 +21,20 @@ app.use(express.static('public'));
 
 app.get ('/api', function(req, res) {
     console.log("GET");
-    var response = {text: 'Hello World!'};
+
+    let sqlInsert = 'INSERT INTO test (text) VALUES ($1)';
+    let sqlInsertAttr = [req.text];
+    pool.connect((err, client) => {
+        if (err) throw err;
+        client.query(sqlInsert, sqlInsertAttr,
+        (err, data) => {
+            if(err) throw err;
+            client.release();
+            console.log("Inserted: ");
+        });
+    });
+
+    var response = {text: req.text};
     res.json(response);
 });
 
