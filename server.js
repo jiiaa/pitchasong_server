@@ -52,11 +52,12 @@ app.get('/s3', function(req, res) {
 bucketPromise.then(
   function(data) {
     var objectParams = {Bucket: bucketName, Key: keyName, Body: 'Hello World!'};
+    console.log("params: ", objectParams);
     var uploadPromise = new AWS.S3({apiVersion: '2006-03-01'}).putObject(objectParams).promise();
     uploadPromise.then(
       function(data) {
         console.log("Successfully uploaded data to " + bucketName + "/" + keyName);
-        res.sjon(data);
+        res.send("ok");
       });
 }).catch(
   function(err) {
