@@ -5,6 +5,10 @@ var morgan = require('morgan');
 var bodyParser = require('body-parser');
 var parser = bodyParser.urlencoded({ extended: true });
 
+var AWS = require('aws-sdk');
+var uuid = require('uuid')
+var s3 = new AWS.S3();
+
 const Pool = require('pg').Pool;
 const conopts = {
     host: process.env.RDS_HOSTNAME,
@@ -19,8 +23,8 @@ const pool = new Pool(conopts);
 app.use(cors());
 app.use(express.static('public'));
 
-app.get ('/api', function(req, res) {
-    console.log("GET");
+app.get('/api', function(req, res) {
+    console.log("GET api");
 
     let sqlInsert = 'INSERT INTO test (text) VALUES ($1)';
     let sqlInsertAttr = [req.query.text];
@@ -36,6 +40,20 @@ app.get ('/api', function(req, res) {
 
     var response = {text: req.query.text};
     res.json(response);
+});
+
+app.get('/s3', function(req, res) {
+    console.log("GET S3");
+    let bucketName = "https://s3.eu-central-1.amazonaws.com/pitchasong/";
+    let keyName = 'hello_world.txt'
+    var params = {Bucket: bucketName, Key: keyName, Body: 'Hello World!'};
+    s3.putObject(params, function(err, data) {
+        if (err)
+            console.log(err)
+        else
+            console.log("Successfully uploaded data to " + bucketName + "/" + keyName);
+    });
+    res.send("Check your bucket...");
 });
 
 var port = process.env.PORT || 3001;
