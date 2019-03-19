@@ -7,7 +7,7 @@ var parser = bodyParser.urlencoded({ extended: true });
 
 var AWS = require('aws-sdk');
 var uuid = require('uuid')
-// var s3 = new AWS.S3();
+var s3 = new AWS.S3();
 
 const Pool = require('pg').Pool;
 const conopts = {
