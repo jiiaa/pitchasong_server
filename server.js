@@ -46,7 +46,7 @@ app.post('/s3', function (req, res) {
     var options = { hour12: false };
     let date = d.toLocaleString('fi-FI', options);
     console.log("POST S3", date);
-    consoloe.log("req: ", req);
+    console.log("req: ", req.body);
     // var s3 = new AWS.S3();
     
     let bucketName = "pitchasong";
