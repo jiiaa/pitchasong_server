@@ -60,7 +60,7 @@ app.get('/s3', function(req, res) {
     //      };
     //     });
 
-    let bucketName = "s3.eu-central-1.amazonaws.com/elasticbeanstalk-eu-central-1-046031456680";
+    let bucketName = "s3.eu-central-1.amazonaws.com/elasticbeanstalk-eu-central-1-046031456680/resources/environments/logs";
     let keyName = 'hello_world.txt';
     var params = {Bucket: bucketName, Key: keyName, Body: 'Hello World!'};
     s3.putObject(params, function(err, data) {
