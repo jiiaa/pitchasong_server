@@ -22,7 +22,7 @@ const pool = new Pool(conopts);
 app.use(cors());
 app.use(express.static('public'));
 
-app.get('/api', function(req, res) {
+app.get('/api', function (req, res) {
     console.log("GET api");
 
     let sqlInsert = 'INSERT INTO test (text) VALUES ($1)';
@@ -30,42 +30,49 @@ app.get('/api', function(req, res) {
     pool.connect((err, client) => {
         if (err) throw err;
         client.query(sqlInsert, sqlInsertAttr,
-        (err, data) => {
-            if(err) throw err;
-            client.release();
-            console.log("Inserted: ", req.query.text);
-        });
+            (err, data) => {
+                if (err) throw err;
+                client.release();
+                console.log("Inserted: ", req.query.text);
+            });
     });
 
-    var response = {text: req.query.text};
+    var response = { text: req.query.text };
     res.json(response);
 });
 
-app.get('/s3', function(req, res) {
+app.get('/s3', function (req, res) {
     console.log("GET S3 jos nyt");
     // var s3 = new AWS.S3();
     let bucketName = "pitchasong";
     let keyName = 'hello_world.txt';
 
-//     var bucketName = 'node-sdk-sample-' + uuid.v4();
-//     var keyName = 'hello_world.txt';
-//     var bucketPromise = new AWS.S3({apiVersion: '2006-03-01'}).createBucket({Bucket: bucketName}).promise();
+    //     var bucketName = 'node-sdk-sample-' + uuid.v4();
+    //     var keyName = 'hello_world.txt';
+    //     var bucketPromise = new AWS.S3({apiVersion: '2006-03-01'}).createBucket({Bucket: bucketName}).promise();
 
-// bucketPromise.then(
-//   function(data) {
-    var objectParams = {Bucket: bucketName, Key: keyName, Body: 'Hello World!'};
+    //  bucketPromise.then(
+    //    function(data) {
+    var objectParams = { Bucket: bucketName, Key: keyName, Body: 'Hello World!' };
     console.log("params: ", objectParams);
-    var uploadPromise = new AWS.S3({apiVersion: '2006-03-01'}).putObject(objectParams).promise();
+    var uploadPromise = new AWS.S3({ apiVersion: '2006-03-01' }).putObject(objectParams).promise();
     uploadPromise.then(
-      function(data) {
-        console.log("Successfully uploaded data to " + bucketName + "/" + keyName);
-        res.send("ok");
-      });
-}).catch(
-  function(err) {
-    console.error(err, err.stack);
-    res.json(err);
-// });
+        function (err, data) {
+            if (err) {
+                console.error(err);
+                res.send(err);
+            } else {
+                console.log("Successfully uploaded data to " + bucketName + "/" + keyName);
+                res.send("ok");
+            };
+        })
+    // }).catch(
+    // function (err) {
+    //     console.error(err, err.stack);
+    //     res.json(err);
+    // });
+
+
 
     // var params = {
     //     Bucket: bucketName, 
@@ -97,8 +104,8 @@ app.get('/s3', function(req, res) {
 });
 
 var port = process.env.PORT || 3001;
-var server = app.listen(port, function() {
+var server = app.listen(port, function () {
     var host = server.address().address
     var port = server.address().port
-    console.log("Now listening at http://%s:%s", host, port )
+    console.log("Now listening at http://%s:%s", host, port)
 });
