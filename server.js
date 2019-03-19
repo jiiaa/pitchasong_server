@@ -42,14 +42,15 @@ app.get('/api', function (req, res) {
 });
 
 app.post('/s3', function (req, res) {
-    let d = new Date()
-    let date = d.toLocaleString('fi-FI', '12hour: false')
+    let d = new Date();
+    var options = { hour12: false };
+    let date = d.toLocaleString('fi-FI', options);
     console.log("POST S3", date);
     // var s3 = new AWS.S3();
     
     let bucketName = "pitchasong";
-    let keyName = req.query.title + ".txt";
-    let bodyText = req.query.text;
+    let keyName = req.body.title + ".txt";
+    let bodyText = req.body.text;
     let objectParams = { Bucket: bucketName, Key: keyName, Body: bodyText };
     console.log("Params: ", objectParams);
     var uploadPromise = new AWS.S3().putObject(objectParams).promise();
@@ -58,16 +59,19 @@ app.post('/s3', function (req, res) {
             if (err) {
                 console.error(err);
                 res.send("Error: ", err);
+                return;
             } else {
                 console.log("Successfully uploaded data to " + bucketName + "/" + keyName);
                 res.send("ok/ ", data);
+                return;
             };
         });
 });
 
 app.get('/s3', function (req, res) {
-    let d = new Date()
-    let date = d.toLocaleString('fi-FI', '12hour: false')
+    let d = new Date();
+    var options = { hour12: false };
+    let date = d.toLocaleString('fi-FI', options);
     console.log("GET S3", date);
 
     let bucketName = "pitchasong";
