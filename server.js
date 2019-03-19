@@ -41,7 +41,7 @@ app.get('/api', function (req, res) {
     res.json(response);
 });
 
-app.post('/s3', function (req, res) {
+app.post('/s3', parser, function (req, res) {
     let d = new Date();
     var options = { hour12: false };
     let date = d.toLocaleString('fi-FI', options);
