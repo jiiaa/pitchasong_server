@@ -43,7 +43,7 @@ app.get('/api', function(req, res) {
 });
 
 app.get('/s3', function(req, res) {
-    console.log("GET S3");
+    console.log("GET S3 read");
 
     let bucketName = "s3.eu-central-1.amazonaws.com/elasticbeanstalk-eu-central-1-046031456680";
     var params = {
@@ -51,10 +51,11 @@ app.get('/s3', function(req, res) {
         Key: "AWS_pg.txt"
        };
        s3.getObject(params, function(err, data) {
+           console.log("getObject started...");
          if (err) {
-             console.log(err, err.stack);
+             console.log("error: ", err, err.stack);
          } else {
-             console.log(data);
+             console.log("response data: ", data);
              res.json(data);
          };
         });
