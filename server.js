@@ -93,7 +93,7 @@ app.get('/s3', function(req, res) {
 //             res.send("Check your bucket...");
 //         }
 //     });
-// });
+});
 
 var port = process.env.PORT || 3001;
 var server = app.listen(port, function() {
