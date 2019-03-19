@@ -41,66 +41,50 @@ app.get('/api', function (req, res) {
     res.json(response);
 });
 
-app.get('/s3', function (req, res) {
-    console.log("GET S3 jos nyt");
+app.post('/s3', function (req, res) {
+    let d = new Date()
+    let date = d.toLocaleString('fi-FI', '12hour: false')
+    console.log("POST S3", date);
     // var s3 = new AWS.S3();
+    
     let bucketName = "pitchasong";
-    let keyName = 'hello_world.txt';
-
-    //     var bucketName = 'node-sdk-sample-' + uuid.v4();
-    //     var keyName = 'hello_world.txt';
-    //     var bucketPromise = new AWS.S3({apiVersion: '2006-03-01'}).createBucket({Bucket: bucketName}).promise();
-
-    //  bucketPromise.then(
-    //    function(data) {
-    var objectParams = { Bucket: bucketName, Key: keyName, Body: 'Hello World!' };
-    console.log("params: ", objectParams);
-    var uploadPromise = new AWS.S3({ apiVersion: '2006-03-01' }).putObject(objectParams).promise();
+    let keyName = req.query.title + ".txt";
+    let bodyText = req.query.text;
+    let objectParams = { Bucket: bucketName, Key: keyName, Body: bodyText };
+    console.log("Params: ", objectParams);
+    var uploadPromise = new AWS.S3().putObject(objectParams).promise();
     uploadPromise.then(
         function (err, data) {
             if (err) {
                 console.error(err);
-                res.send(err);
+                res.send("Error: ", err);
             } else {
                 console.log("Successfully uploaded data to " + bucketName + "/" + keyName);
-                res.send("ok");
+                res.send("ok/ ", data);
             };
-        })
-    // }).catch(
-    // function (err) {
-    //     console.error(err, err.stack);
-    //     res.json(err);
-    // });
+        });
+});
 
+app.get('/s3', function (req, res) {
+    let d = new Date()
+    let date = d.toLocaleString('fi-FI', '12hour: false')
+    console.log("GET S3", date);
 
-
-    // var params = {
-    //     Bucket: bucketName, 
-    //     Key: "AcceleratedLearning.txt"
-    //    };
-    //    s3.getObject(params, function(err, data) {
-    //        console.log("getObject started...");
-    //      if (err) {
-    //         console.log("error: ", err, err.stack);
-    //         res.send(err, err.stack);
-    //      } else {
-    //          console.log("response data: ", data);
-    //          res.send("data: ", data);
-    //      };
-    //     });
-
-//     let bucketName = "pitchasong";
-//     let keyName = 'hello_world.txt';
-//     var params = {Bucket: bucketName, Key: keyName, Body: 'Hello World!'};
-//     s3.putObject(params, function(err, data) {
-//         if (err) {
-//             console.log(err)
-//             res.send(err);
-//         } else {
-//             console.log("Successfully uploaded data to " + bucketName + "/" + keyName);
-//             res.send("Check your bucket...");
-//         }
-//     });
+    let bucketName = "pitchasong";
+    let keyName = req.query.title + ".txt";
+    let objectParams = { Bucket: bucketName, Key: keyName };
+    console.log("Params: ", objectParams);
+    var downloadPromise = new AWS.S3().getObject(objectParams).promise();
+    downloadPromise.then(
+        function (err, data) {
+            if (err) {
+                console.error(err);
+                res.send("Error: ", err);
+            } else {
+                console.log("Successfully downloaded data from " + bucketName + "/" + keyName);
+                res.send("ok/ ", data);
+            };
+        });
 });
 
 var port = process.env.PORT || 3001;

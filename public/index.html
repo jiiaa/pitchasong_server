@@ -6,12 +6,20 @@
 </head>
 <body>
     <form action="http://Loppuprojekti-env.4wv6cxwtgr.eu-central-1.elasticbeanstalk.com/api" method="GET">
-        <input type="text" name="text" placeholder="Enter text" autofocus>
+        <input type="text" name="text" placeholder="Enter text" />
         <button type="submit">Lähetä</button>
     </form>
     <br />
-    <form action="http://Loppuprojekti-env.4wv6cxwtgr.eu-central-1.elasticbeanstalk.com/s3" method="GET">
-        <button type="submit">S3</button>
+    <form action="http://Loppuprojekti-env.4wv6cxwtgr.eu-central-1.elasticbeanstalk.com/s3" method="POST">
+        <input type="text" name="title" placeholder="title" autofocus />
+        <input type="text" name="text" placeholder="title" autofocus />
+        <button type="submit">S3 Post</button>
     </form>
+    <br />
+    <form action="http://Loppuprojekti-env.4wv6cxwtgr.eu-central-1.elasticbeanstalk.com/s3" method="GET">
+        <input type="text" name="title" placeholder="title" autofocus />
+        <button type="submit">S3 Get</button>
+    </form>
+
 </body>
 </html>
