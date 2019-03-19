@@ -7,7 +7,6 @@ var parser = bodyParser.urlencoded({ extended: true });
 
 var AWS = require('aws-sdk');
 var uuid = require('uuid')
-var s3 = new AWS.S3();
 
 const Pool = require('pg').Pool;
 const conopts = {
@@ -44,6 +43,9 @@ app.get('/api', function(req, res) {
 
 app.get('/s3', function(req, res) {
     console.log("GET S3 jos nyt");
+    // var s3 = new AWS.S3();
+    let bucketName = "pitchasong";
+    let keyName = 'hello_world.txt';
 
 //     var bucketName = 'node-sdk-sample-' + uuid.v4();
 //     var keyName = 'hello_world.txt';
@@ -51,35 +53,34 @@ app.get('/s3', function(req, res) {
 
 // bucketPromise.then(
 //   function(data) {
-//     var objectParams = {Bucket: bucketName, Key: keyName, Body: 'Hello World!'};
-//     console.log("params: ", objectParams);
-//     var uploadPromise = new AWS.S3({apiVersion: '2006-03-01'}).putObject(objectParams).promise();
-//     uploadPromise.then(
-//       function(data) {
-//         console.log("Successfully uploaded data to " + bucketName + "/" + keyName);
-//         res.send("ok");
-//       });
-// }).catch(
-//   function(err) {
-//     console.error(err, err.stack);
-//     res.json(err);
+    var objectParams = {Bucket: bucketName, Key: keyName, Body: 'Hello World!'};
+    console.log("params: ", objectParams);
+    var uploadPromise = new AWS.S3({apiVersion: '2006-03-01'}).putObject(objectParams).promise();
+    uploadPromise.then(
+      function(data) {
+        console.log("Successfully uploaded data to " + bucketName + "/" + keyName);
+        res.send("ok");
+      });
+}).catch(
+  function(err) {
+    console.error(err, err.stack);
+    res.json(err);
 // });
 
-    let bucketName = "pitchasong";
-    var params = {
-        Bucket: bucketName, 
-        Key: "AcceleratedLearning.txt"
-       };
-       s3.getObject(params, function(err, data) {
-           console.log("getObject started...");
-         if (err) {
-             console.log("error: ", err, err.stack);
-               res.send(err, err.stack);
-         } else {
-             console.log("response data: ", data);
-             res.send("data: ", data);
-         };
-        });
+    // var params = {
+    //     Bucket: bucketName, 
+    //     Key: "AcceleratedLearning.txt"
+    //    };
+    //    s3.getObject(params, function(err, data) {
+    //        console.log("getObject started...");
+    //      if (err) {
+    //         console.log("error: ", err, err.stack);
+    //         res.send(err, err.stack);
+    //      } else {
+    //          console.log("response data: ", data);
+    //          res.send("data: ", data);
+    //      };
+    //     });
 
 //     let bucketName = "pitchasong";
 //     let keyName = 'hello_world.txt';
