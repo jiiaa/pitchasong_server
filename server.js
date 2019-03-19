@@ -7,7 +7,7 @@ var parser = bodyParser.urlencoded({ extended: true });
 
 var AWS = require('aws-sdk');
 var uuid = require('uuid')
-var s3 = new AWS.S3();
+// var s3 = new AWS.S3();
 
 const Pool = require('pg').Pool;
 const conopts = {
@@ -45,21 +45,40 @@ app.get('/api', function(req, res) {
 app.get('/s3', function(req, res) {
     console.log("GET S3 getObject");
 
-    let bucketName = "s3.eu-central-1.amazonaws.com/pitchasong";
-    var params = {
-        Bucket: bucketName, 
-        Key: "AcceleratedLearning.txt"
-       };
-       s3.getObject(params, function(err, data) {
-           console.log("getObject started...");
-         if (err) {
-             console.log("error: ", err, err.stack);
-               res.send(err, err.stack);
-         } else {
-             console.log("response data: ", data);
-             res.send("data: ", data);
-         };
-        });
+    var bucketName = 'node-sdk-sample-' + uuid.v4();
+    var keyName = 'hello_world.txt';
+    var bucketPromise = new AWS.S3({apiVersion: '2006-03-01'}).createBucket({Bucket: bucketName}).promise();
+
+bucketPromise.then(
+  function(data) {
+    var objectParams = {Bucket: bucketName, Key: keyName, Body: 'Hello World!'};
+    var uploadPromise = new AWS.S3({apiVersion: '2006-03-01'}).putObject(objectParams).promise();
+    uploadPromise.then(
+      function(data) {
+        console.log("Successfully uploaded data to " + bucketName + "/" + keyName);
+        res.sjon(data);
+      });
+}).catch(
+  function(err) {
+    console.error(err, err.stack);
+    res.json(err);
+});
+
+    // let bucketName = "s3.eu-central-1.amazonaws.com/pitchasong";
+    // var params = {
+    //     Bucket: bucketName, 
+    //     Key: "AcceleratedLearning.txt"
+    //    };
+    //    s3.getObject(params, function(err, data) {
+    //        console.log("getObject started...");
+    //      if (err) {
+    //          console.log("error: ", err, err.stack);
+    //            res.send(err, err.stack);
+    //      } else {
+    //          console.log("response data: ", data);
+    //          res.send("data: ", data);
+    //      };
+    //     });
 
     // let bucketName = "s3.eu-central-1.amazonaws.com/elasticbeanstalk-eu-central-1-046031456680/resources/environments/logs";
     // let keyName = 'hello_world.txt';
