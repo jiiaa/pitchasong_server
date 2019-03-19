@@ -43,27 +43,27 @@ app.get('/api', function(req, res) {
 });
 
 app.get('/s3', function(req, res) {
-    console.log("GET S3 getObject");
+    console.log("GET S3 jos nyt");
 
-    var bucketName = 'node-sdk-sample-' + uuid.v4();
-    var keyName = 'hello_world.txt';
-    var bucketPromise = new AWS.S3({apiVersion: '2006-03-01'}).createBucket({Bucket: bucketName}).promise();
+//     var bucketName = 'node-sdk-sample-' + uuid.v4();
+//     var keyName = 'hello_world.txt';
+//     var bucketPromise = new AWS.S3({apiVersion: '2006-03-01'}).createBucket({Bucket: bucketName}).promise();
 
-bucketPromise.then(
-  function(data) {
-    var objectParams = {Bucket: bucketName, Key: keyName, Body: 'Hello World!'};
-    console.log("params: ", objectParams);
-    var uploadPromise = new AWS.S3({apiVersion: '2006-03-01'}).putObject(objectParams).promise();
-    uploadPromise.then(
-      function(data) {
-        console.log("Successfully uploaded data to " + bucketName + "/" + keyName);
-        res.send("ok");
-      });
-}).catch(
-  function(err) {
-    console.error(err, err.stack);
-    res.json(err);
-});
+// bucketPromise.then(
+//   function(data) {
+//     var objectParams = {Bucket: bucketName, Key: keyName, Body: 'Hello World!'};
+//     console.log("params: ", objectParams);
+//     var uploadPromise = new AWS.S3({apiVersion: '2006-03-01'}).putObject(objectParams).promise();
+//     uploadPromise.then(
+//       function(data) {
+//         console.log("Successfully uploaded data to " + bucketName + "/" + keyName);
+//         res.send("ok");
+//       });
+// }).catch(
+//   function(err) {
+//     console.error(err, err.stack);
+//     res.json(err);
+// });
 
     // let bucketName = "s3.eu-central-1.amazonaws.com/pitchasong";
     // var params = {
@@ -81,18 +81,18 @@ bucketPromise.then(
     //      };
     //     });
 
-    // let bucketName = "s3.eu-central-1.amazonaws.com/elasticbeanstalk-eu-central-1-046031456680/resources/environments/logs";
-    // let keyName = 'hello_world.txt';
-    // var params = {Bucket: bucketName, Key: keyName, Body: 'Hello World!'};
-    // s3.putObject(params, function(err, data) {
-    //     if (err) {
-    //         console.log(err)
-    //         res.send(err);
-    //     } else {
-    //         console.log("Successfully uploaded data to " + bucketName + "/" + keyName);
-    //         res.send("Check your bucket...");
-    //     }
-    // });
+    let bucketName = "pitchasong";
+    let keyName = 'hello_world.txt';
+    var params = {Bucket: bucketName, Key: keyName, Body: 'Hello World!'};
+    s3.putObject(params, function(err, data) {
+        if (err) {
+            console.log(err)
+            res.send(err);
+        } else {
+            console.log("Successfully uploaded data to " + bucketName + "/" + keyName);
+            res.send("Check your bucket...");
+        }
+    });
 });
 
 var port = process.env.PORT || 3001;
