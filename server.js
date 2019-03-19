@@ -44,16 +44,18 @@ app.get('/api', function(req, res) {
 
 app.get('/s3', function(req, res) {
     console.log("GET S3");
-    let bucketName = "https://s3.eu-central-1.amazonaws.com/pitchasong/";
+    let bucketName = "s3.eu-central-1.amazonaws.com/pitchasong/";
     let keyName = 'hello_world.txt'
     var params = {Bucket: bucketName, Key: keyName, Body: 'Hello World!'};
     s3.putObject(params, function(err, data) {
-        if (err)
+        if (err) {
             console.log(err)
-        else
+            res.send(err);
+        } else {
             console.log("Successfully uploaded data to " + bucketName + "/" + keyName);
+            res.send("Check your bucket...");
+        }
     });
-    res.send("Check your bucket...");
 });
 
 var port = process.env.PORT || 3001;
