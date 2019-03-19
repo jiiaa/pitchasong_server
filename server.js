@@ -45,8 +45,7 @@ app.get('/api', function(req, res) {
 app.get('/s3', function(req, res) {
     console.log("GET S3 read");
 
-    // let bucketName = "s3.eu-central-1.amazonaws.com/elasticbeanstalk-eu-central-1-046031456680";
-    let bucketName = 's3://elasticbeanstalk-eu-central-1-046031456680/AWS_pg.txt';
+    let bucketName = "s3.eu-central-1.amazonaws.com/elasticbeanstalk-eu-central-1-046031456680";
     var params = {
         Bucket: bucketName, 
         Key: "AWS_pg.txt"
