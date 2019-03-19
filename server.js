@@ -45,32 +45,32 @@ app.get('/api', function(req, res) {
 app.get('/s3', function(req, res) {
     console.log("GET S3");
 
-    let bucketName = "s3.eu-central-1.amazonaws.com/pitchasong";
-    var params = {
-        Bucket: bucketName, 
-        Key: "AcceleratedLearning.txt"
-       };
-       s3.getObject(params, function(err, data) {
-         if (err) {
-             console.log(err, err.stack);
-         } else {
-             console.log(data);
-             res.json(data);
-         };
-        });
+    let bucketName = "s3.eu-central-1.amazonaws.com/elasticbeanstalk-eu-central-1-046031456680/";
+    // var params = {
+    //     Bucket: bucketName, 
+    //     Key: "AcceleratedLearning.txt"
+    //    };
+    //    s3.getObject(params, function(err, data) {
+    //      if (err) {
+    //          console.log(err, err.stack);
+    //      } else {
+    //          console.log(data);
+    //          res.json(data);
+    //      };
+    //     });
 
     // let bucketName = "s3.eu-central-1.amazonaws.com/pitchasong/";
-    // let keyName = 'hello_world.txt';
-    // var params = {Bucket: bucketName, Key: keyName, Body: 'Hello World!'};
-    // s3.putObject(params, function(err, data) {
-    //     if (err) {
-    //         console.log(err)
-    //         res.send(err);
-    //     } else {
-    //         console.log("Successfully uploaded data to " + bucketName + "/" + keyName);
-    //         res.send("Check your bucket...");
-    //     }
-    // });
+    let keyName = 'hello_world.txt';
+    var params = {Bucket: bucketName, Key: keyName, Body: 'Hello World!'};
+    s3.putObject(params, function(err, data) {
+        if (err) {
+            console.log(err)
+            res.send(err);
+        } else {
+            console.log("Successfully uploaded data to " + bucketName + "/" + keyName);
+            res.send("Check your bucket...");
+        }
+    });
 });
 
 var port = process.env.PORT || 3001;
