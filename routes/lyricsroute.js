@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const constants = require('../constants/constants');
+const app = express();
 
 const apikey = process.env.API_KEY;
 
