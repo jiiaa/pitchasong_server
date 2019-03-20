@@ -21,6 +21,7 @@ const logger = (req, res, next) => {
 
 const API_VERSION = '2006-03-01';
 const BUCKET_NAME = 'pitchasong';
+const BUCKET_URL = 'https://s3.eu-central-1.amazonaws.com/pitchasong/';
 
 const Pool = require('pg').Pool;
 const conopts = {
@@ -41,17 +42,17 @@ app.use(logger);
 app.post('/bucket', upload.single('audiofile'), (req, res) => {
     console.log("req: ", req.file);
     
-    // let fileFormat = req.file.mimetype.split("/")[1].trim();
-    // let fileName = req.file.fieldname + uudi4() + "." + fileFormat;
-    // let objectParams = { Bucket: BUCKET_NAME, Key: fileName, Body: req.file.buffer, ContentType: req.file.mimetype };
+    let fileFormat = req.file.mimetype.split("/")[1].trim();
+    let fileName = req.file.fieldname + uudi4() + "." + fileFormat;
+    let objectParams = { Bucket: BUCKET_NAME, Key: fileName, Body: req.file.buffer, ContentType: req.file.mimetype };
 
-    // let uploadPromise = new AWS.S3({ apiVersion: API_VERSION }).putObject(objectParams).promise();
-    // uploadPromise
-    // .then(data => {
-    //     console.log("Uploaded data to " + BUCKET_NAME + "/" + fileName);
-    // })
-    // .catch(error => console.error(error));
-    res.send("Hiio-hoi!");
+    let uploadPromise = new AWS.S3({ apiVersion: API_VERSION }).putObject(objectParams).promise();
+    uploadPromise
+    .then(data => {
+        console.log("Uploaded data to " + BUCKET_NAME + "/" + fileName);
+    })
+    .catch(error => console.error(error));
+    res.send(BUCKET_URL + fileName);
 });
 
 // Tallentaa tekstikentän Postgresiin
