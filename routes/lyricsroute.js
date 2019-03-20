@@ -17,7 +17,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(logger);
 
-router.post('/', (req, res) => {
+router.post('/', bodyParser, (req, res) => {
     console.log("POST@lyrics, req: ", req.body);
 
     // return fetch(req.body.url, {
