@@ -1,6 +1,7 @@
 const express = require('express');
 const router = require('express').Router();
 const app = express();
+const bodyParser = require('body-parser');
 
 const apikey = process.env.API_KEY;
 
@@ -12,6 +13,8 @@ const logger = (req, res, next) => {
     next();
 };
 
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(logger);
 
 router.post('/', (req, res) => {
