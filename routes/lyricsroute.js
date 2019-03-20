@@ -14,7 +14,8 @@ const logger = (req, res, next) => {
 
 app.use(logger);
 
-router.post('/lyrics', (req, res) => {
+router.post('/', (req, res) => {
+    console.log("POST@lyrics, req: ", req.body);
 
     // return fetch(req.body.url, {
     //     method: 'GET',
