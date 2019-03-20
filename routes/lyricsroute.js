@@ -5,7 +5,7 @@ const fetch = require('node-fetch');
 const apikey = process.env.API_KEY;
 
 router.post('', (req, res) => {
-    console.log("POST@lyrics, req: ", req.body);
+    console.log("POST@lyrics, req: ", req.body.url);
 
     return fetch(req.body.url, {
         method: 'GET',
