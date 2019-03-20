@@ -13,7 +13,7 @@ router.post('', (req, res) => {
             'Accept': 'application/json',
             'X-RapidAPI-Key': apikey
         }
-    }
+    })
     .then(response => {
         console.log("Auddio: ", response);
         res.json(response);
@@ -22,7 +22,6 @@ router.post('', (req, res) => {
     .catch(error => {
         console.error("Error: ", error);
     })
-    )
     // res.send("POST sent back");
 });
 
