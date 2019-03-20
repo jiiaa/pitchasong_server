@@ -6,8 +6,9 @@ const apikey = process.env.API_KEY;
 
 router.post('', (req, res) => {
     console.log("POST@lyrics, req: ", req.body.url);
+    const urli = 'https://api.audd.io/findLyrics/?q=How%20deep%20is%20your%20love';
 
-    return fetch(req.body.url, {
+    return fetch(urli, {
         method: 'GET',
         headers: { 
             'Accept': 'application/json',
