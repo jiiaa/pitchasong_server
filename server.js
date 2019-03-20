@@ -43,7 +43,7 @@ app.post('/bucket', upload.single('audiofile'), (req, res) => {
     console.log("req: ", req.file);
     
     let fileFormat = req.file.mimetype.split("/")[1].trim();
-    let fileName = req.file.fieldname + uudi4() + "." + fileFormat;
+    let fileName = req.file.fieldname + uuid4() + "." + fileFormat;
     let objectParams = { Bucket: BUCKET_NAME, Key: fileName, Body: req.file.buffer, ContentType: req.file.mimetype };
 
     let uploadPromise = new AWS.S3({ apiVersion: API_VERSION }).putObject(objectParams).promise();
