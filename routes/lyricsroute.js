@@ -11,7 +11,7 @@ const logger = (req, res, next) => {
     next();
 };
 
-app.user(logger);
+app.use(logger);
 
 router.post('/lyrics', (req, res) => {
 
