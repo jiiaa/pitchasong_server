@@ -20,22 +20,22 @@ app.use(logger);
 router.post('/', bodyParser, (req, res) => {
     console.log("POST@lyrics, req: ", req.body);
 
-    // return fetch(req.body.url, {
-    //     method: 'GET',
-    //     headers: {
-    //         'Accept': 'application/json',
-    //         'X-RapidAPI-Key': apikey
-    //     }
-    // }
-    // .then(response => {
-    //     console.log("Auddio: ", response);
-    //     return response;
-    // })
-    // .catch(error => {
-
-    // })
-    // )
-    res.json(req.body.url);
+    return fetch(req.body.url, {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json',
+            'X-RapidAPI-Key': apikey
+        }
+    }
+    .then(response => {
+        console.log("Auddio: ", response);
+        return response;
+    })
+    .catch(error => {
+        console.error("Error: ", error);
+    })
+    )
+    res.json(response);
 });
 
 module.exports = router;
