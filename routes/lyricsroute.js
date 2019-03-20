@@ -1,23 +1,22 @@
 const express = require('express');
 const router = require('express').Router();
-const app = express();
-const bodyParser = require('body-parser');
+// const app = express();
+// const bodyParser = require('body-parser');
 
 const apikey = process.env.API_KEY;
 
-const logger = (req, res, next) => {
-    let d = new Date();
-    let options = { hour12: false };
-    let date = d.toLocaleString('fi-FI', options);
-    console.log(req.method + '@' + req.originalUrl + ' / ' + date);
-    next();
-};
+// const logger = (req, res, next) => {
+//     let options = { hour12: false };
+//     let date = d.toLocaleString('fi-FI', options);
+//     console.log(req.method + '@' + req.originalUrl + ' / ' + date);
+//     next();
+// };
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(logger);
+// app.use(bodyParser.json());
+// app.use(bodyParser.urlencoded({ extended: false }));
+// app.use(logger);
 
-router.post('/', bodyParser, (req, res) => {
+router.post('', (req, res) => {
     console.log("POST@lyrics, req: ", req.body);
 
     // return fetch(req.body.url, {
