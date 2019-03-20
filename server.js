@@ -23,7 +23,7 @@ app.use(logger);
 // routes
 app.use('/hum', humRouter);
 // app.use('/file', fileRouter);
-// app.use('/lyrics', lyricsRouter);
+app.use('/lyrics', lyricsRouter);
 
 app.get('/', (req, res) => {
     res.json({ success: true, message: 'Root' });
