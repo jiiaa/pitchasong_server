@@ -52,18 +52,22 @@ router.post('/', upload.single('audiofile'), async (req, res) => {
     console.log('req: ', req.file);
 
     let fileFormat = req.file.mimetype.split('/')[1].trim();
-    let fileName = req.file.fieldname + uuid4() + '.' + fileFormat;
+    let fileName = req.file.fieldname + '-' + uuid4() + '.' + fileFormat;
     let objectParams = { Bucket: constants.BUCKET_NAME, Key: fileName, Body: req.file.buffer, ContentType: req.file.mimetype };
 
     try {
         let uploadResult = await new AWS.S3({ apiVersion: constants.API_VERSION }).putObject(objectParams).promise();
-        let filePath = constants.BUCKET_URL + '/lastchristmas.mp3';
-        // let filePath = constants.BUCKET_URL + '/' + fileName;
+        let filePath = constants.BUCKET_URL + fileName;
+        // let filePath = constants.BUCKET_URL + 'lastchristmas.mp3';
         console.log('Uploaded data to ' + filePath);
         let humResults = await auddio.getHummingResults(filePath);
-        res.status(200).json({ success: true, message: humResults });
+        if (humResults.result) {
+            res.status(200).json({ success: true, message: humResults.result.list });
+        } else {
+            res.status(200).json({ success: true, message: [] });
+        }
     } catch (error) {
-        res.status(400).json({ success: false, message: error.message });
+        res.status(200).json({ success: false, message: error.message });
     }
 });
 
