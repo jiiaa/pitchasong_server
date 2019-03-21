@@ -5,25 +5,38 @@ const conopts = {
     password: process.env.RDS_PASSWORD,
     port: process.env.RDS_PORT,
     database: process.env.RDS_DB_NAME
-}
+};
 
-// Tallentaa tekstikentän Postgresiin
-// app.get('/api', function(req, res) {
-//     console.log('GET api');
+function addSong(songData) {
+    let sqlInsert = 'INSERT INTO songs (link, filename, type) VALUES ($1, $2, $3)';
+    let sqlInsertAttr = [songData.link, songData.filename, songData.type];
+    pool.connect((err, client) => {
+        if (err) throw err;
+        client.query(sqlInsert, sqlInsertAttr, (err, data) => {
+            if (err) throw err;
+            client.release();
+            console.log('Inserted: ', data);
+        });
+    });
+    var response = { res: "Song added to database" };
+    res.json(response);
+};
 
-//     let sqlInsert = 'INSERT INTO test (text) VALUES ($1)';
-//     let sqlInsertAttr = [req.query.text];
-//     pool.connect((err, client) => {
-//         if (err) throw err;
-//         client.query(sqlInsert, sqlInsertAttr, (err, data) => {
-//             if (err) throw err;
-//             client.release();
-//             console.log('Inserted: ', req.query.text);
-//         });
-//     });
-
-//     var response = { text: req.query.text };
-//     res.json(response);
-// });
+function deleteSong(songData) {
+    let sqlDelete = 'DELETE FROM songs WHERE link = $1';
+    let sqlDelAttr = [songData.link];
+    pool.connect((err, client) => {
+        if (err) throw err;
+        client.query(sqlDelete, sqlDelAttr, (err, data) => {
+            if (err) throw err;
+            client.release();
+            console.log('Song deleted', data);
+        })
+    })
+    var response = { res: "Song deleted from database" };
+    res.json(response)
+};
 
 const pool = new Pool(conopts);
+
+module.exports = { addSong, deleteSong };

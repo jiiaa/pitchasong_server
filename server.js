@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const bodyParser = require('body-parser');
 
 const fileRouter = require('./routes/fileroute');
 const humRouter = require('./routes/humroute');
@@ -19,11 +20,13 @@ const logger = (req, res, next) => {
 app.use(cors());
 app.use(express.static('public'));
 app.use(logger);
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 
 // routes
 app.use('/hum', humRouter);
 // app.use('/file', fileRouter);
-// app.use('/lyrics', lyricsRouter);
+app.use('/lyrics', lyricsRouter);
 
 app.get('/', (req, res) => {
     res.json({ success: true, message: 'Root' });
