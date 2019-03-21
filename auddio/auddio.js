@@ -7,7 +7,7 @@ const getHummingResults = async audio_url => {
             method: 'GET',
             headers: {
                 Accept: 'application/json',
-                'X-RapidAPI-Key': process.env.AUDD_API_KEY
+                'X-RapidAPI-Key': process.env.API_KEY
             }
         });
         if (!result.ok) {
@@ -16,6 +16,7 @@ const getHummingResults = async audio_url => {
         let jsonRes = await result.json();
         return jsonRes;
     } catch (error) {
+        console.error(error);
         throw error;
     }
 };
