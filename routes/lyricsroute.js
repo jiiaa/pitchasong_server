@@ -8,7 +8,7 @@ router.post('', (req, res) => {
     console.log("POST@lyrics, req: ", req.body.url);
     const urli = 'https://api.audd.io/findLyrics/?q=How%20deep%20is%20your%20love';
 
-    return fetch(req.body.url, {
+    fetch(req.body.url, {
         method: 'GET',
         headers: { 
             'Accept': 'application/json',
@@ -27,3 +27,26 @@ router.post('', (req, res) => {
 });
 
 module.exports = router;
+
+// fetch(req.body.url, {
+//     method: 'GET',
+//     headers: { 
+//         'Accept': 'application/json',
+//         'X-RapidAPI-Key': apikey
+//     }
+// })
+// .then(response => {
+//     if (response.ok) {
+//         console.log("Auddio: ", response);
+//         return response.json();
+//     } else {
+//         throw new Error ("Failed to fetch russian vodka");
+//     }
+// })
+// .then (jsonRes => {
+//     res.status(200).json({ success: true, message: jsonRes });
+// })
+// .catch(error => {
+//     res.status(400).json({ success: false, message: error.message });
+// })
+// });
