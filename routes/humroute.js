@@ -38,7 +38,7 @@ const mockAnswerFalse = JSON.stringify({ status: 'success', result: null });
 // <request: hummed audiofile (parsed with multer)>
 // <response: Audd.io API response or failure message>
 router.get('/', (req, res) => {
-    res.status(200).json({ success: true, message: mockAnswerTrue });
+    res.status(200).json({ success: true, message: mockAnswerFalse });
     // auddio
     //     .getHummingResults(bullshit)
     //     .then(response => {
@@ -48,20 +48,23 @@ router.get('/', (req, res) => {
     // res.end();
 });
 
-router.post('/', upload.single('audiofile'), (req, res) => {
+router.post('/', upload.single('audiofile'), async (req, res) => {
     console.log('req: ', req.file);
 
     let fileFormat = req.file.mimetype.split('/')[1].trim();
     let fileName = req.file.fieldname + uuid4() + '.' + fileFormat;
     let objectParams = { Bucket: constants.BUCKET_NAME, Key: fileName, Body: req.file.buffer, ContentType: req.file.mimetype };
 
-    let uploadPromise = new AWS.S3({ apiVersion: constants.API_VERSION }).putObject(objectParams).promise();
-    uploadPromise
-        .then(data => {
-            console.log('Uploaded data to ' + constants.BUCKET_NAME + '/' + fileName);
-        })
-        .catch(error => console.error(error));
-    res.send(constants.BUCKET_URL + fileName);
+    try {
+        let uploadResult = await new AWS.S3({ apiVersion: constants.API_VERSION }).putObject(objectParams).promise();
+        let filePath = constants.BUCKET_URL + '/lastchristmas.mp3';
+        // let filePath = constants.BUCKET_URL + '/' + fileName;
+        console.log('Uploaded data to ' + filePath);
+        let humResults = await auddio.getHummingResults(filePath);
+        res.status(200).json({ success: true, message: humResults });
+    } catch (error) {
+        res.status(400).json({ success: false, message: error.message });
+    }
 });
 
 module.exports = router;
