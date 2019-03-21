@@ -1,5 +1,5 @@
 const fetch = require('node-fetch');
-require('dotenv').config({ path: '.env.development' });
+// require('dotenv').config({ path: '.env.development' });
 
 const getHummingResults = async audio_url => {
     try {

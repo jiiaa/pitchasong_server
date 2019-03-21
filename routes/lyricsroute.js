@@ -6,7 +6,6 @@ const apikey = process.env.API_KEY;
 
 router.post('', (req, res) => {
     console.log("POST@lyrics, req: ", req.body.url);
-    console.log("API-Key: ", apikey);
 
     fetch(req.body.url, {
         method: 'GET',
@@ -17,7 +16,6 @@ router.post('', (req, res) => {
     })
     .then(response => {
         if (response.ok) {
-            console.log("Auddio: ", response);
             return response.json();
         } else {
             throw new Error ("Failed to fetch russian vodka");
