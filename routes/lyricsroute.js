@@ -16,37 +16,19 @@ router.post('', (req, res) => {
         }
     })
     .then(response => {
-        console.log("Auddio: ", response);
-        res.json(response);
-        return;
+        if (response.ok) {
+            console.log("Auddio: ", response);
+            return response.json();
+        } else {
+            throw new Error ("Failed to fetch russian vodka");
+        }
+    })
+    .then (jsonRes => {
+        res.status(200).json({ success: true, message: jsonRes });
     })
     .catch(error => {
-        console.error("Error: ", error);
+        res.status(400).json({ success: false, message: error.message });
     })
-    // res.send("POST sent back");
 });
 
 module.exports = router;
-
-// fetch(req.body.url, {
-//     method: 'GET',
-//     headers: { 
-//         'Accept': 'application/json',
-//         'X-RapidAPI-Key': apikey
-//     }
-// })
-// .then(response => {
-//     if (response.ok) {
-//         console.log("Auddio: ", response);
-//         return response.json();
-//     } else {
-//         throw new Error ("Failed to fetch russian vodka");
-//     }
-// })
-// .then (jsonRes => {
-//     res.status(200).json({ success: true, message: jsonRes });
-// })
-// .catch(error => {
-//     res.status(400).json({ success: false, message: error.message });
-// })
-// });
