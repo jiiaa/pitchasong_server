@@ -17,7 +17,7 @@ router.post('', (req, res) => {
     })
     .then(response => {
         if (response.ok) {
-            console.log("Auddio: ", response);
+            console.log("Auddio: ", response,json());
             return response.json();
         } else {
             throw new Error ("Failed to fetch russian vodka");
