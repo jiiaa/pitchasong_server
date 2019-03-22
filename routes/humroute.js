@@ -47,8 +47,8 @@ router.post('/', upload.single('audiofile'), async (req, res) => {
     let objectParams = { Bucket: constants.BUCKET_NAME, Key: fileName, Body: req.file.buffer, ContentType: req.file.mimetype };
     try {
         let uploadResult = await new AWS.S3({ apiVersion: constants.API_VERSION }).putObject(objectParams).promise();
-        // let filePath = constants.BUCKET_URL + fileName;
-        let filePath = constants.BUCKET_URL + 'lastchristmas.mp3';
+        let filePath = constants.BUCKET_URL + fileName;
+        // let filePath = constants.BUCKET_URL + 'lastchristmas.mp3';
         console.log('Uploaded data to ' + filePath); // for instant S3 access checking
         let humResults = await auddio.getHummingResults(filePath);
         let token = await auddio.getNewSpotifyToken();
