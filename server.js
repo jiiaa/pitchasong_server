@@ -28,8 +28,12 @@ app.use('/hum', humRouter);
 // app.use('/file', fileRouter);
 app.use('/lyrics', lyricsRouter);
 
-app.get('/', (req, res) => {
-    res.json({ success: true, message: 'Root' });
+app.get('/*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public/index.html'), function(err) {
+        if (err) {
+            res.status(500).send(err);
+        }
+    });
 });
 
 var port = process.env.PORT || 3001;
