@@ -15,7 +15,9 @@ const getHummingResults = async audio_url => {
         }
         let jsonRes = await result.json();
         if (jsonRes.status === 'error') {
-            throw new Error(jsonRes.error.error_message + ' ' + jsonRes.requested_params.url);
+            if (jsonRes.error.error_code !== 100 && jsonRes.error.error_code !== 300) {
+                throw new Error(jsonRes.error.error_message + ' ' + jsonRes.requested_params.url);
+            }
         }
         return jsonRes;
     } catch (error) {
