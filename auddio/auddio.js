@@ -21,7 +21,28 @@ const getHummingResults = async audio_url => {
         }
         return jsonRes;
     } catch (error) {
-        console.error(error);
+        throw error;
+    }
+};
+
+const getRecordedResults = async rec_audio_url => {
+    try {
+        let result = await fetch('https://audd.p.rapidapi.com/recognize/?url=' + rec_audio_url, {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'X-RapidAPI-Key': constants.API_KEY
+            }
+        });
+        if (!result.ok) {
+            throw new Error('Audd.io error with message ' + result.message + ' and statuscode ' + result.status);
+        }
+        let jsonRes = await result.json();
+        if (jsonRes.status === 'error') {
+            throw new Error(jsonRes.error.error_message + ' ' + jsonRes.requested_params.url);
+        }
+        return jsonRes;
+    } catch (error) {
         throw error;
     }
 };
@@ -50,7 +71,6 @@ const getNewSpotifyToken = async () => {
         }
         return jsonRes.token_type + ' ' + jsonRes.access_token;
     } catch (error) {
-        console.error('Token method: ' + error);
         return false;
     }
 };
@@ -83,9 +103,8 @@ const getSpotifyResults = async (artist, title, token) => {
         let imgUrl = albumImg.url;
         return { performer, song, albumName, releaseDate, trackUrl, imgUrl };
     } catch (error) {
-        console.log('Spotify get method: ' + error);
         throw error;
     }
 };
 
-module.exports = { getHummingResults, getSpotifyResults, getNewSpotifyToken };
+module.exports = { getHummingResults, getSpotifyResults, getNewSpotifyToken, getRecordedResults };
