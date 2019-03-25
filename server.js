@@ -26,7 +26,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 // routes
 app.use('/hum', humRouter);
-// app.use('/file', fileRouter);
+app.use('/file', fileRouter);
 app.use('/lyrics', lyricsRouter);
 
 app.get('/*', (req, res) => {
