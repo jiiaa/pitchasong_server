@@ -23,7 +23,8 @@ function addHumGet(songData) {
 };
 
 function addHumRes(status) {
-    if (status) {
+    console.log("db/status: ", status);
+    if (status === true) {
     let sqlInsert = 'UPDATE stats SET humresultok = humresultok  + 1';
     pool.connect((err, client) => {
         if (err) throw err;
