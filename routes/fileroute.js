@@ -1,33 +1,50 @@
 const router = require('express').Router();
-
+const AWS = require('aws-sdk');
+const uuid4 = require('uuid4');
+const multer = require('multer');
+const auddio = require('../auddio/auddio');
 const constants = require('../constants/constants');
 
-//Lisää kovakoodatun tekstitiedoston S3 Buckettiin, kun frontista klikataan painiketta
-// router.post('/s3', parser, function(req, res) {
-//     let d = new Date();
-//     var options = { hour12: false };
-//     let date = d.toLocaleString('fi-FI', options);
-//     console.log('POST S3', date);
-//     console.log('req: ', req.body);
-//     // var s3 = new AWS.S3();
+const store = multer.memoryStorage();
+const upload = multer({ storage: store });
 
-//     let bucketName = 'pitchasong';
-//     let keyName = req.body.title + '.txt';
-//     let bodyText = req.body.text;
-//     let objectParams = { Bucket: bucketName, Key: keyName, Body: bodyText };
-//     console.log('Params: ', objectParams);
-//     var uploadPromise = new AWS.S3().putObject(objectParams).promise();
-//     uploadPromise.then(function(err, data) {
-//         if (err) {
-//             console.error(err);
-//             res.send('Error: ', err);
-//             return;
-//         } else {
-//             console.log('Successfully uploaded data to ' + bucketName + '/' + keyName);
-//             res.send('ok/ ', data);
-//             return;
-//         }
-//     });
-// });
+router.post('/', upload.single('audiofile'), async (req, res) => {
+    // First check, filesize too big
+    if (req.file.size > 2 * 1000000) {
+        return res.json({ success: false, message: 'Filesize must be under 2MB, received ' + req.file.size / 1000000 + 'MB' });
+    }
+
+    const fileFormat = req.file.mimetype.split('/')[1].trim();
+    const fileName = req.file.fieldname + '-' + uuid4() + '.' + fileFormat;
+
+    // Second check, given filetype not supported
+    if (fileFormat !== 'mp3' && fileFormat !== 'ogg') {
+        return res.json({ success: false, message: 'Only .mp3 and .ogg filetypes supported' });
+    }
+
+    // S3 bucket parameters
+    let objectParams = { Bucket: constants.BUCKET_NAME, Key: fileName, Body: req.file.buffer, ContentType: req.file.mimetype };
+
+    // Upload to S3 bucket, fetch Auddio-API results and possible Spotify results
+    try {
+        let uploadResult = await new AWS.S3({ apiVersion: constants.API_VERSION }).putObject(objectParams).promise();
+        let filePath = constants.BUCKET_URL + fileName;
+        let recResults = await auddio.getRecordedResults(filePath);
+        let token = await auddio.getNewSpotifyToken();
+        if (recResults.result) {
+            try {
+                let resultObj = await auddio.getSpotifyResults(recResults.result.artist, recResults.result.title, token);
+                recResults.result.spotifyResult = resultObj;
+            } catch (error) {
+                recResults.result.spotifyResult = false;
+            }
+            res.status(200).json({ success: true, message: recResults.result });
+        } else {
+            res.status(200).json({ success: true, message: { artist: false } });
+        }
+    } catch (error) {
+        res.status(200).json({ success: false, message: error.message });
+    }
+});
 
 module.exports = router;
