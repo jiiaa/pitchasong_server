@@ -4,6 +4,7 @@ const uuid4 = require('uuid4');
 const multer = require('multer');
 const auddio = require('../auddio/auddio');
 const constants = require('../constants/constants');
+const dbservice = require('../database/dbservice')
 
 const store = multer.memoryStorage();
 const upload = multer({ storage: store });
@@ -42,6 +43,7 @@ const upload = multer({ storage: store });
 // <request: hummed audiofile (parsed with multer)>
 // <response: Audd.io API response or failure message>
 router.post('/', upload.single('audiofile'), async (req, res) => {
+    dbservice.addHumGet();
     let fileFormat = req.file.mimetype.split('/')[1].trim();
     let fileName = req.file.fieldname + '-' + uuid4() + '.' + fileFormat;
     let objectParams = { Bucket: constants.BUCKET_NAME, Key: fileName, Body: req.file.buffer, ContentType: req.file.mimetype };
@@ -61,8 +63,10 @@ router.post('/', upload.single('audiofile'), async (req, res) => {
                     resultItem.spotifyResult = false;
                 }
             }
+            dbservice.addHumRes(({status: true}));
             res.status(200).json({ success: true, message: humResults.result.list });
         } else {
+            dbservice.addHumRes({status: false});
             res.status(200).json({ success: true, message: [] });
         }
     } catch (error) {

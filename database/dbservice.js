@@ -7,36 +7,43 @@ const conopts = {
     database: process.env.RDS_DB_NAME
 };
 
-function addSong(songData) {
-    let sqlInsert = 'INSERT INTO songs (link, filename, type) VALUES ($1, $2, $3)';
-    let sqlInsertAttr = [songData.link, songData.filename, songData.type];
-    pool.connect((err, client) => {
-        if (err) throw err;
-        client.query(sqlInsert, sqlInsertAttr, (err, data) => {
-            if (err) throw err;
-            client.release();
-            console.log('Inserted: ', data);
-        });
-    });
-    var response = { res: "Song added to database" };
-    res.json(response);
-};
-
-function deleteSong(songData) {
-    let sqlDelete = 'DELETE FROM songs WHERE link = $1';
-    let sqlDelAttr = [songData.link];
-    pool.connect((err, client) => {
-        if (err) throw err;
-        client.query(sqlDelete, sqlDelAttr, (err, data) => {
-            if (err) throw err;
-            client.release();
-            console.log('Song deleted', data);
-        })
-    })
-    var response = { res: "Song deleted from database" };
-    res.json(response)
-};
-
 const pool = new Pool(conopts);
 
-module.exports = { addSong, deleteSong };
+function addHumGet(songData) {
+    let sqlInsert = 'UPDATE stats SET humcount = humcount  + 1';
+    // let sqlInsertAttr = [songData.link, songData.filename, songData.type];
+    pool.connect((err, client) => {
+        if (err) throw err;
+        client.query(sqlInsert, (err, data) => {
+            if (err) throw err;
+            client.release();
+            console.log('Humcount increased');
+        });
+    });
+};
+
+function addHumRes(status) {
+    if (status) {
+    let sqlInsert = 'UPDATE stats SET humresultok = humresultok  + 1';
+    pool.connect((err, client) => {
+        if (err) throw err;
+        client.query(sqlInsert, (err, data) => {
+            if (err) throw err;
+            client.release();
+            console.log('Humresultok increased');
+        });
+    });
+    } else {
+        let sqlInsert = 'UPDATE stats SET humresultnok = humresultnok  + 1';
+        pool.connect((err, client) => {
+            if (err) throw err;
+            client.query(sqlInsert, (err, data) => {
+                if (err) throw err;
+                client.release();
+                console.log('Humresultnok increased');
+            });
+        });
+    }
+};
+
+module.exports = { addHumGet, addHumRes };
