@@ -10,7 +10,7 @@ const conopts = {
 const pool = new Pool(conopts);
 
 function addHumGet() {
-    console.log("addHumGet");
+    console.log("addHumGet@db");
     let sqlInsert = 'UPDATE stats SET humcount = humcount  + 1';
     pool.connect((err, client) => {
         if (err) throw err;
@@ -23,7 +23,7 @@ function addHumGet() {
 };
 
 function addHumRes(response) {
-    console.log("addHumRes");
+    console.log("addHumRes@db");
     console.log("db/status: ", response.status);
 
     if (response.status === true) {
@@ -63,7 +63,7 @@ function addHumRes(response) {
 };
 
 function addLyricsGet() {
-    console.log("addLyricsGet");
+    console.log("addLyricsGet@db");
     let sqlInsert = 'UPDATE stats SET lyricscount = lyricscount  + 1';
     pool.connect((err, client) => {
         if (err) throw err;
@@ -76,8 +76,7 @@ function addLyricsGet() {
 };
 
 function addLyricsRes(response) {
-    console.log("addLyricsRes");
-    console.log("db/status: ", response);
+    console.log("addLyricsRes@db");
     if (response.status == true) {
         let sqlInsert = 'UPDATE stats SET lyricsresultok = lyricsresultok  + 1';
         pool.connect((err, client) => {
