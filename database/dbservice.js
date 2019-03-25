@@ -47,4 +47,41 @@ function addHumRes(status) {
     }
 };
 
-module.exports = { addHumGet, addHumRes };
+function addLyricsGet(songData) {
+    let sqlInsert = 'UPDATE stats SET lyricscount = lyricscount  + 1';
+    pool.connect((err, client) => {
+        if (err) throw err;
+        client.query(sqlInsert, (err, data) => {
+            if (err) throw err;
+            client.release();
+            console.log('Lyricscount increased');
+        });
+    });
+};
+
+function addLyricsRes(status) {
+    console.log("db/status: ", status);
+    if (status === true) {
+    let sqlInsert = 'UPDATE stats SET lyricscountok = lyricscountok  + 1';
+    pool.connect((err, client) => {
+        if (err) throw err;
+        client.query(sqlInsert, (err, data) => {
+            if (err) throw err;
+            client.release();
+            console.log('Lyricsresultok increased');
+        });
+    });
+    } else {
+        let sqlInsert = 'UPDATE stats SET lyricscountnok = lyricscountnok  + 1';
+        pool.connect((err, client) => {
+            if (err) throw err;
+            client.query(sqlInsert, (err, data) => {
+                if (err) throw err;
+                client.release();
+                console.log('Lyricsresultnok increased');
+            });
+        });
+    }
+};
+
+module.exports = { addHumGet, addHumRes, addLyricsGet, addLyricsRes };
