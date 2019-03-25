@@ -108,7 +108,7 @@ function getAbout() {
         client.query(sqlFind, (err, data) => {
             if (err) throw err;
             client.release();
-            console.log("All data retrieved from db for About");
+            console.log("All data retrieved from db for About", data);
             return data;
         })
     })
