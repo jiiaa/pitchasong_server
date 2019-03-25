@@ -28,8 +28,8 @@ function addHumRes(status, response) {
 
     if (status === true) {
         let scoreArray = [];
-        response.forEach(element => {
-            scoreArray.push(element);
+        response.status.forEach(element => {
+            scoreArray.push(element.score);
         });
         scoreArray.sort(function (a, b) { return b - a });
         let max = scoreArray[0];
