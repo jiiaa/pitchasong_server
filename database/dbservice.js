@@ -101,7 +101,7 @@ function addLyricsRes(status) {
 };
 
 function getAbout() {
-    console.log("getAbout")
+    console.log("getAbout@db")
     let sqlFind = 'SELECT * FROM stats';
     pool.connect((err, client) => {
         if (err) throw err;
