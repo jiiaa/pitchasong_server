@@ -24,7 +24,11 @@ router.post('', (req, res) => {
     })
     .then (jsonRes => {
         console.log("status 200: ", jsonRes);
-        dbservice.addLyricsRes({status: true});
+        try {
+            dbservice.addLyricsRes({status: true});
+        } catch (error) {
+            console.log("Error@addLyricsRes: ", error);
+        }
         res.status(200).json({ success: true, message: jsonRes });
     })
     .catch(error => {

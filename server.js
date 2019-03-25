@@ -6,6 +6,7 @@ const path = require('path');
 const fileRouter = require('./routes/fileroute');
 const humRouter = require('./routes/humroute');
 const lyricsRouter = require('./routes/lyricsroute');
+const aboutRouter = require('./routes/aboutroute');
 
 const app = express();
 
