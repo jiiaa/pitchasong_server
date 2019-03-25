@@ -10,8 +10,8 @@ const conopts = {
 const pool = new Pool(conopts);
 
 function addHumGet(songData) {
+    console.log("addHumGet");
     let sqlInsert = 'UPDATE stats SET humcount = humcount  + 1';
-    // let sqlInsertAttr = [songData.link, songData.filename, songData.type];
     pool.connect((err, client) => {
         if (err) throw err;
         client.query(sqlInsert, (err, data) => {
@@ -23,30 +23,31 @@ function addHumGet(songData) {
 };
 
 function addHumRes(status, response) {
+    console.log("addHumRes");
     console.log("db/status: ", status);
-    let scoreArray = [];
-    response.forEach(element => {
-        scoreArray.push(element);
-    });
-    scoreArray.sort(function(a, b){return b - a});
-    let max = scoreArray[0];
 
     if (status === true) {
-    let sqlUpdate = 'UPDATE stats SET humresultok = humresultok  + 1';
-    let sqlInsert = 'INSERT INTO stats (humscore) VALUES ($1)';
-    let sqlInsertAttr = [max];
-    pool.connect((err, client) => {
-        if (err) throw err;
-        client.query(sqlUpdate, (err, data) => {
-            if (err) throw err;
-            console.log('Humresultok increased');
+        let scoreArray = [];
+        response.forEach(element => {
+            scoreArray.push(element);
         });
-        client.query(sqlInsert, sqlInsertAttr, (err, data) => {
+        scoreArray.sort(function (a, b) { return b - a });
+        let max = scoreArray[0];
+        let sqlUpdate = 'UPDATE stats SET humresultok = humresultok  + 1';
+        let sqlInsert = 'INSERT INTO stats (humscore) VALUES ($1)';
+        let sqlInsertAttr = [max];
+        pool.connect((err, client) => {
             if (err) throw err;
-            client.release();
-            console.log("Score added");
-        })
-    });
+            client.query(sqlUpdate, (err, data) => {
+                if (err) throw err;
+                console.log('Humresultok increased');
+            });
+            client.query(sqlInsert, sqlInsertAttr, (err, data) => {
+                if (err) throw err;
+                client.release();
+                console.log("Score added");
+            })
+        });
     } else {
         let sqlInsert = 'UPDATE stats SET humresultnok = humresultnok  + 1';
         pool.connect((err, client) => {
@@ -61,6 +62,7 @@ function addHumRes(status, response) {
 };
 
 function addLyricsGet(songData) {
+    console.log("addLyricsGet");
     let sqlInsert = 'UPDATE stats SET lyricscount = lyricscount  + 1';
     pool.connect((err, client) => {
         if (err) throw err;
@@ -73,17 +75,18 @@ function addLyricsGet(songData) {
 };
 
 function addLyricsRes(status) {
+    console.log("addLyricsRes");
     console.log("db/status: ", status);
-    if (status === true) {
-    let sqlInsert = 'UPDATE stats SET lyricsresultok = lyricsresultok  + 1';
-    pool.connect((err, client) => {
-        if (err) throw err;
-        client.query(sqlInsert, (err, data) => {
+    if (status == true) {
+        let sqlInsert = 'UPDATE stats SET lyricsresultok = lyricsresultok  + 1';
+        pool.connect((err, client) => {
             if (err) throw err;
-            client.release();
-            console.log('Lyricsresultok increased');
+            client.query(sqlInsert, (err, data) => {
+                if (err) throw err;
+                client.release();
+                console.log('Lyricsresultok increased');
+            });
         });
-    });
     } else {
         let sqlInsert = 'UPDATE stats SET lyricsresultnok = lyricsresultnok  + 1';
         pool.connect((err, client) => {
@@ -97,4 +100,10 @@ function addLyricsRes(status) {
     }
 };
 
-module.exports = { addHumGet, addHumRes, addLyricsGet, addLyricsRes };
+function getAbout() {
+    console.log("getAbout")
+    let sqlFind = 'SELECT '
+
+}
+
+module.exports = { addHumGet, addHumRes, addLyricsGet, addLyricsRes, getAbout };

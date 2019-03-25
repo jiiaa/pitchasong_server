@@ -28,6 +28,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use('/hum', humRouter);
 app.use('/file', fileRouter);
 app.use('/lyrics', lyricsRouter);
+app.user('/about', aboutRouter);
 
 app.get('/*', (req, res) => {
     res.sendFile(path.join(__dirname, 'public/index.html'), function(err) {
