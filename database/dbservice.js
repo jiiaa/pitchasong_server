@@ -109,7 +109,7 @@ function getAbout() {
             if (err) throw err;
             client.release();
             console.log("All data retrieved from db for About");
-            res.json(data);
+            return data;
         })
     })
 
