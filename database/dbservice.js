@@ -77,8 +77,8 @@ function addLyricsGet() {
 
 function addLyricsRes(response) {
     console.log("addLyricsRes");
-    console.log("db/status: ", response.status.status);
-    if (response.status.status == true) {
+    console.log("db/status: ", response);
+    if (response.status == true) {
         let sqlInsert = 'UPDATE stats SET lyricsresultok = lyricsresultok  + 1';
         pool.connect((err, client) => {
             if (err) throw err;
