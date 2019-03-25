@@ -9,7 +9,7 @@ const conopts = {
 
 const pool = new Pool(conopts);
 
-function addHumGet(songData) {
+function addHumGet() {
     console.log("addHumGet");
     let sqlInsert = 'UPDATE stats SET humcount = humcount  + 1';
     pool.connect((err, client) => {
@@ -22,16 +22,17 @@ function addHumGet(songData) {
     });
 };
 
-function addHumRes(status, response) {
+function addHumRes(response) {
     console.log("addHumRes");
-    console.log("db/status: ", status);
+    console.log("db/status: ", response.status);
 
-    if (status === true) {
+    if (response.status === true) {
         let scoreArray = [];
-        response.status.forEach(element => {
+        response.response.forEach(element => {
             scoreArray.push(element.score);
         });
         scoreArray.sort(function (a, b) { return b - a });
+        console.log("scoreArray: ", scoreArray);
         let max = scoreArray[0];
         let sqlUpdate = 'UPDATE stats SET humresultok = humresultok  + 1';
         let sqlInsert = 'INSERT INTO stats (humscore) VALUES ($1)';
@@ -61,7 +62,7 @@ function addHumRes(status, response) {
     }
 };
 
-function addLyricsGet(songData) {
+function addLyricsGet() {
     console.log("addLyricsGet");
     let sqlInsert = 'UPDATE stats SET lyricscount = lyricscount  + 1';
     pool.connect((err, client) => {
@@ -74,10 +75,10 @@ function addLyricsGet(songData) {
     });
 };
 
-function addLyricsRes(status) {
+function addLyricsRes(response) {
     console.log("addLyricsRes");
-    console.log("db/status: ", status);
-    if (status == true) {
+    console.log("db/status: ", response.status.status);
+    if (response.status.status == true) {
         let sqlInsert = 'UPDATE stats SET lyricsresultok = lyricsresultok  + 1';
         pool.connect((err, client) => {
             if (err) throw err;
