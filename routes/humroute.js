@@ -63,7 +63,7 @@ router.post('/', upload.single('audiofile'), async (req, res) => {
                     resultItem.spotifyResult = false;
                 }
             }
-            dbservice.addHumRes({status: true});
+            dbservice.addHumRes({status: true, response: humResults.result.list});
             res.status(200).json({ success: true, message: humResults.result.list });
         } else {
             dbservice.addHumRes({status: false});
