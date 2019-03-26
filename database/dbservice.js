@@ -35,7 +35,7 @@ function addHumRes(response) {
         console.log("scoreArray: ", scoreArray);
         let max = scoreArray[0];
         let sqlUpdate = 'UPDATE stats SET humresultok = humresultok  + 1';
-        let sqlInsert = 'INSERT INTO stats (humscore) VALUES ($1)';
+        let sqlInsert = 'INSERT INTO scores (score) VALUES ($1)';
         let sqlInsertAttr = [max];
         pool.connect((err, client) => {
             if (err) throw err;
