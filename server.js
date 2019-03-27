@@ -6,6 +6,7 @@ const path = require('path');
 const fileRouter = require('./routes/fileroute');
 const humRouter = require('./routes/humroute');
 const lyricsRouter = require('./routes/lyricsroute');
+const aboutRouter = require('./routes/aboutroute');
 
 const app = express();
 
@@ -28,6 +29,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use('/hum', humRouter);
 app.use('/file', fileRouter);
 app.use('/lyrics', lyricsRouter);
+app.use('/about', aboutRouter);
 
 app.get('/*', (req, res) => {
     res.sendFile(path.join(__dirname, 'public/index.html'), function(err) {

@@ -4,6 +4,7 @@ const uuid4 = require('uuid4');
 const multer = require('multer');
 const auddio = require('../auddio/auddio');
 const constants = require('../constants/constants');
+const dbservice = require('../database/dbservice');
 
 const store = multer.memoryStorage();
 const upload = multer({ storage: store });
@@ -22,6 +23,13 @@ router.post('/', upload.single('audiofile'), async (req, res) => {
         return res.json({ success: false, message: 'Only .mp3 and .ogg filetypes supported' });
     }
 
+    // Add 1 to File upload counter in database
+    try {
+        dbservice.addFileGet();
+    } catch (error) {
+        console.log('Error@addFileGet: ', error);
+    }
+
     // S3 bucket parameters
     let objectParams = { Bucket: constants.BUCKET_NAME, Key: fileName, Body: req.file.buffer, ContentType: req.file.mimetype };
 
@@ -38,8 +46,14 @@ router.post('/', upload.single('audiofile'), async (req, res) => {
             } catch (error) {
                 recResults.result.spotifyResult = false;
             }
+            try {
+                dbservice.addFileRes({ status: true });
+            } catch (error) {
+                console.log('Error@addFileRes: ', error);
+            }
             res.status(200).json({ success: true, message: recResults.result });
         } else {
+            dbservice.addFileRes({ status: false });
             res.status(200).json({ success: true, message: { artist: false } });
         }
     } catch (error) {
