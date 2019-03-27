@@ -10,8 +10,6 @@ const store = multer.memoryStorage();
 const upload = multer({ storage: store });
 
 router.post('/', upload.single('audiofile'), async (req, res) => {
-    console.log(req.file);
-
     // First check, filesize too big
     if (req.file.size > 1.5 * 1000000) {
         return res.json({ success: false, message: 'Filesize must be under 1.5MB, received ' + (req.file.size / 1000000).toFixed(2) + 'MB' });
