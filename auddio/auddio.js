@@ -14,7 +14,7 @@ const getHummingResults = async audio_url => {
             throw new Error('Audd.io error with message ' + result.message + ' and statuscode ' + result.status);
         }
         let jsonRes = await result.json();
-        if (jsonRes.status === 'error') {
+        if (jsonRes.status === 'error') { // Check Audd.io error codes for more info
             if (jsonRes.error.error_code !== 100 && jsonRes.error.error_code !== 300) {
                 throw new Error(jsonRes.error.error_message + ' ' + jsonRes.requested_params.url);
             }

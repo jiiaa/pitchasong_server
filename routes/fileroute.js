@@ -10,8 +10,8 @@ const upload = multer({ storage: store });
 
 router.post('/', upload.single('audiofile'), async (req, res) => {
     // First check, filesize too big
-    if (req.file.size > 2 * 1000000) {
-        return res.json({ success: false, message: 'Filesize must be under 2MB, received ' + req.file.size / 1000000 + 'MB' });
+    if (req.file.size > 1.5 * 1000000) {
+        return res.json({ success: false, message: 'Filesize must be under 1.5MB, received ' + (req.file.size / 1000000).toFixed(2) + 'MB' });
     }
 
     const fileFormat = req.file.mimetype.split('/')[1].trim();
