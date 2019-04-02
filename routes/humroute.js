@@ -50,6 +50,12 @@ router.post('/', upload.single('audiofile'), async (req, res) => {
             });
             res.status(200).json({ success: true, message: humResults.result.list });
         } else {
+            let objectParam = { Bucket: constants.BUCKET_NAME, Key: fileName};
+            console.log("Params for object delete: ", objectParam);
+            let deleteResult = new AWS.S3().deleteObject(objectParam, function(err, data) {
+                if (err) console.log("Delete S3 error: ", err, err.stack);
+                else console.log("Delete S3 ok");
+            });
             dbservice.addHumRes({ status: false });
             res.status(200).json({ success: true, message: [] });
         }
